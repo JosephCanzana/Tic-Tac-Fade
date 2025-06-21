@@ -1,27 +1,38 @@
 import pygame
 from panel import Panel
 from my_color import MyColor
-        
+
+
 def main():
     # Start
     pygame.init()
 
-    # Game window aesthetics
+    # Game window
     screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     pygame.display.set_caption("Tic Tac Fade")
 
+    # Font
+    primary_font = pygame.font.SysFont("Segoi UI", size=40) 
+    secondary_font = pygame.font.SysFont("Arial", size=40) 
+    
 
     # Sprites
     board = pygame.image.load("sprites/board.png").convert_alpha()
-    board = scale_image_to_window(board, screen.size)
-    o_sprite = pygame.image.load("sprites/O.png").convert_alpha()
     x_sprite = pygame.image.load("sprites/X.png").convert_alpha()
+    o_sprite = pygame.image.load("sprites/O.png").convert_alpha()
 
-    board_location = center_image_to_border(board.size, screen.get_size())
+    # Labels
+    cs50p = secondary_font.render("This is CS50P",False ,MyColor.secondaryLabel)
+    title = primary_font.render("Tic Tac Fade", False, MyColor.label)
+    footer = secondary_font.render("Tic-Tac-Fade | 2025", True, MyColor.quaternaryLabel)
 
-    panel = Panel(screen,0.1, 0.2, 0.05, 0.2, screen.get_size())
-    print(f"Size: {screen.size}")
-    print(f"Get Size: {screen.get_size()}")
+    player1 = primary_font.render("Player 1", True, MyColor.tertiaryLabel)
+    player2 = primary_font.render("Player 2", True, MyColor.tertiaryLabel)
+    score_p1 = secondary_font.render("0", True, MyColor.tertiaryLabel)
+    score_p2 = secondary_font.render("0", True, MyColor.tertiaryLabel)
+
+    # Panel class
+    panel = Panel(0.1, 0.23, 0.05, 0.23, screen.get_size())
 
     # Clock for frame
     clock = pygame.Clock()
@@ -32,28 +43,36 @@ def main():
         background = MyColor.primaryBackground
         screen.fill(background)
 
-        screen.blit(board,board_location)
-
         # Get all event and update
         for event in pygame.event.get():
             # window resize
             if event.type == pygame.VIDEORESIZE:
-                board = scale_image_to_window(board, screen.get_size())
-                board_location = center_image_to_border(board.size, screen.get_size())
                 panel.resize(screen.get_size())
-
 
             # Window exit button clicked
             if event.type == pygame.QUIT:
                 running = False
 
-
         # Adding Panel
-        pygame.draw.rect(screen, rect=panel.north, color="#4C8ADBEE")
-        pygame.draw.rect(screen, rect=panel.east, color="#AE00EDEF")
-        pygame.draw.rect(screen, rect=panel.west, color="#EBE94DFF")
-        pygame.draw.rect(screen, rect=panel.south, color="#6CEB65EE")
-        pygame.draw.rect(screen, rect=panel.center, color="#474949ED")
+        pygame.draw.rect(screen, rect=panel.north, color=MyColor.tertiaryBackground)
+        pygame.draw.rect(screen, rect=panel.east, color=MyColor.primaryBackground)
+        pygame.draw.rect(screen, rect=panel.west, color=MyColor.primaryBackground)
+        pygame.draw.rect(screen, rect=panel.south, color=MyColor.tertiaryBackground)
+        pygame.draw.rect(screen, rect=panel.center, color=MyColor.primaryBackground)
+
+        # Add Sprite
+        panel.add(screen, board, (panel.CENTER, panel.MIDDLE), 1, panel.center)
+
+        panel.add(screen, cs50p, (panel.CENTER, panel.TOP), 0.3, panel.north, (0, 5))
+        panel.add(screen, title, (panel.CENTER, panel.MIDDLE), 0.5, panel.north, (0, 7))
+
+        panel.add(screen, footer, (panel.CENTER, panel.MIDDLE), 0.6, panel.south, (0, 0))
+
+        panel.add(screen, player1, (panel.CENTER, panel.TOP), 0.5, panel.west, (0, 9))
+        panel.add(screen, score_p1, (panel.CENTER, panel.BOTTOM), 0.1, panel.west, (0, -3))
+
+        panel.add(screen, player2, (panel.CENTER, panel.TOP), 0.5, panel.east, (0, 9))
+        panel.add(screen, score_p2, (panel.CENTER, panel.BOTTOM), 0.1, panel.east, (0, -3))
 
 
         # Update display
@@ -63,28 +82,6 @@ def main():
 
     # Game Exit
     pygame.quit()
-
-
-def scale_image_to_window(image: pygame.Surface, window_size: tuple[int, int]) -> pygame.Surface:
-
-    # Window size minimum
-    window_width, window_height = window_size
-    scale_base = min(window_width, window_height)
-    # Resize
-    surface_size = int(scale_base * 0.90)
-
-    return pygame.transform.scale(image, (surface_size, surface_size))
-    
-
-def center_image_to_border(surface_size: tuple[int, int],window_size: tuple[int, int]) -> tuple[int, int]:
-    w_window, h_window = window_size
-    w_surface, h_surface = surface_size
-
-    location_x = (w_window - w_surface) // 2
-    location_y = (h_window - h_surface) // 2
-
-    return location_x, location_y
-
 
 if __name__ == "__main__":
     main()

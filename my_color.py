@@ -1,19 +1,19 @@
 class MyColor:
     
-    blue = (28, 82, 130)         # Deep Space Blue
-    green = (63, 191, 127)       # Alien Green
-    indigo = (75, 0, 130)        # Cosmic Indigo
-    orange = (255, 140, 0)       # Solar Flare Orange
-    pink = (255, 105, 180)       # Nebula Pink
-    purple = (128, 0, 128)       # Galactic Purple
-    red = (178, 34, 34)          # Mars Red
-    teal = (54, 117, 136)        # Ice Planet Teal
-    yellow = (255, 215, 0)       # Star Gold
+    blue = (28, 82, 130)         
+    green = (63, 191, 127)       
+    indigo = (75, 0, 130)        
+    orange = (255, 140, 0)       
+    pink = (255, 105, 180)       
+    purple = (128, 0, 128)        
+    red = (178, 34, 34)          
+    teal = (54, 117, 136)       
+    yellow = (255, 215, 0)       
 
-    label = (235, 235, 245)                      # Light Label on Dark Background
-    secondaryLabel = (235, 235, 245, 153)        # 60% opacity
-    tertiaryLabel = (235, 235, 245, 76)          # 30% opacity
-    quaternaryLabel = (235, 235, 245, 45)        # 17% opacity
+    label = (245, 245, 255)                      # Bright white-blue for highest contrast on primaryBackground
+    secondaryLabel = (245, 245, 255, 180)        # Slightly transparent for secondary elements
+    tertiaryLabel = (245, 245, 255, 100)         # More transparent, subtle hint for less important text
+    quaternaryLabel = (245, 245, 255, 60)          
 
     primaryBackground = (10, 10, 20)             # Deep Space Black
     secondaryBackground = (20, 20, 35)           # Starfield Shadow
