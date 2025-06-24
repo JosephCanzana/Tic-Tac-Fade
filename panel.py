@@ -48,21 +48,49 @@ class Panel:
             f"West: {self.west}"
         )
 
+    def draw(self, 
+             screen, 
+             north_clr="#FFFFFF", 
+             east_clr="#FFFFFF", 
+             south_clr="#FFFFFF", 
+             west_clr="#FFFFFF", 
+             center_clr="#FFFFFF"):
+        
+        pygame.draw.rect(screen, rect=self.north, color=north_clr)
+        pygame.draw.rect(screen, rect=self.east, color=east_clr)
+        pygame.draw.rect(screen, rect=self.west, color=south_clr)
+        pygame.draw.rect(screen, rect=self.south, color=west_clr)
+        pygame.draw.rect(screen, rect=self.center, color=center_clr)
+
+
     def add(
         self,
         screen: pygame.Surface,
         surface: pygame.Surface,
-        alignment: tuple[str, str] = ("center", "middle"),
         size_pct: float = 1.0,
         region_rect: pygame.Rect = None,
+        alignment: tuple[str, str] = ("center", "middle"),
         gap: tuple[int, int] = (0, 0),
     ):
         if region_rect is None:
             region_rect = self.center
 
+        # Making surface reponsive
+        surface = self.responisve_size(surface, region_rect, size_pct)
+
+        # Alignment logic
+        x, y = self.determine_position(surface.width, surface.height, region_rect, alignment)
+
+        # Gap
+        wgap, hgap = gap
+        abs_pos = (x + wgap, y + hgap)
+        screen.blit(surface, abs_pos)
+        return surface
+    
+    def responisve_size(self, surface: pygame.Surface, parent_rect: pygame.Rect, size_pct: float):
         # Resize
         surf_w, surf_h = surface.get_size()
-        region_w, region_h = region_rect.size
+        region_w, region_h = parent_rect.size
 
         # Calculate max allowed size based on size_pct
         max_w = int(region_w * size_pct)
@@ -73,21 +101,19 @@ class Panel:
         new_w = int(surf_w * scale)
         new_h = int(surf_h * scale)
 
-        surface = pygame.transform.scale(surface, (new_w, new_h))
-
-        # Alignment logic
+        return pygame.transform.scale(surface, (new_w, new_h))
+    
+    def determine_position(self, w: int, h: int, region: pygame.Rect, alignment: tuple=[str, str]):
         x_align, y_align = alignment
-        x = region_rect.x
-        y = region_rect.y
 
         # Horizontal alignment
         match x_align:
             case "center":
-                x = region_rect.x + (region_rect.width - new_w) // 2
+                x = region.x + (region.width - w) // 2
             case "right":
-                x = region_rect.right - new_w
+                x = region.right - w
             case "left":
-                x = region_rect.x
+                x = region.x
             case _:
                 try:
                     offset = int(x_align)
@@ -97,16 +123,16 @@ class Panel:
                     )
                 if offset < 0:
                     raise ValueError("Negative offset is not allowed")
-                x = region_rect.x + offset
+                x = region.x + offset
 
         # Vertical alignment
         match y_align:
             case "middle":
-                y = region_rect.y + (region_rect.height - new_h) // 2
+                y = region.y + (region.height - h) // 2
             case "top":
-                y = region_rect.y
+                y = region.y
             case "bottom":
-                y = region_rect.bottom - new_h
+                y = region.bottom - h
             case _:
                 try:
                     offset = int(y_align)
@@ -116,15 +142,10 @@ class Panel:
                     )
                 if offset < 0:
                     raise ValueError("Negative offset is not allowed")
-                y = region_rect.y + offset
-
-        # Gap
-        wgap, hgap = gap
-
-        abs_pos = (x + wgap, y + hgap)
-        screen.blit(surface, abs_pos)
-
-        return surface
+                y = region.y + offset
+            
+        return (x,y)
+        
 
     def resize(self, window_size):
         # Store the full window size (width, height)
