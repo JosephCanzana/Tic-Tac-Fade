@@ -71,15 +71,18 @@ class Panel:
         region_rect: pygame.Rect = None,
         alignment: tuple[str, str] = ("center", "middle"),
         gap: tuple[int, int] = (0, 0),
+        responsive: bool = True,
     ):
         if region_rect is None:
             region_rect = self.center
 
-        # Making surface reponsive
-        surface = self.responisve_size(surface, region_rect, size_pct)
+        if responsive:
+            # Making surface reponsive
+            w, h = self.responsive_size(surface.size, region_rect, size_pct)
+            surface = pygame.transform.scale(surface, (w, h))
 
-        # Alignment logic
-        x, y = self.determine_position(surface.width, surface.height, region_rect, alignment)
+            # Alignment logic
+            x, y = self.determine_position(surface.size, region_rect, alignment)
 
         # Gap
         wgap, hgap = gap
@@ -87,9 +90,9 @@ class Panel:
         screen.blit(surface, abs_pos)
         return surface
     
-    def responisve_size(self, surface: pygame.Surface, parent_rect: pygame.Rect, size_pct: float):
+    def responsive_size(self, size: tuple[int,int], parent_rect: pygame.Rect, size_pct: float):
         # Resize
-        surf_w, surf_h = surface.get_size()
+        surf_w, surf_h = size
         region_w, region_h = parent_rect.size
 
         # Calculate max allowed size based on size_pct
@@ -101,9 +104,10 @@ class Panel:
         new_w = int(surf_w * scale)
         new_h = int(surf_h * scale)
 
-        return pygame.transform.scale(surface, (new_w, new_h))
+        return (new_w, new_h)
     
-    def determine_position(self, w: int, h: int, region: pygame.Rect, alignment: tuple=[str, str]):
+    def determine_position(self, size: tuple[int, int], region: pygame.Rect, alignment: tuple=[str, str]):
+        w, h = size
         x_align, y_align = alignment
 
         # Horizontal alignment

@@ -1,28 +1,16 @@
 class MyColor:
-    
-    blue = (28, 82, 130)         
-    green = (63, 191, 127)       
-    indigo = (75, 0, 130)        
-    orange = (255, 140, 0)       
-    pink = (255, 105, 180)       
-    purple = (128, 0, 128)        
-    red = (178, 34, 34)          
-    teal = (54, 117, 136)       
-    yellow = (255, 215, 0)       
+    blue = (6, 190, 255)
+    green = (78, 190, 159)
+    indigo = (58, 28, 245)
+    orange = (255, 163, 72)
+    pink = (255, 120, 170)
+    purple = (195, 163, 226)
 
-    label = (245, 245, 255)                      # Bright white-blue for highest contrast on primaryBackground
-    secondaryLabel = (245, 245, 255, 180)        # Slightly transparent for secondary elements
-    tertiaryLabel = (245, 245, 255, 100)         # More transparent, subtle hint for less important text
-    quaternaryLabel = (245, 245, 255, 60)          
+    primaryBackground = (15, 22, 36)
+    secondaryBackground = (24, 32, 48)
+    tertiaryBackground = (33, 42, 62)
 
-    primaryBackground = (10, 10, 20)             # Deep Space Black
-    secondaryBackground = (20, 20, 35)           # Starfield Shadow
-    tertiaryBackground = (15, 15, 30)            # Cosmic Dust
-
-    separator = (88, 88, 99)                     # Dim Starline
-    opaqueSeparator = (88, 88, 99, 255)
-
-    placeholderText = (235, 235, 245, 76)
-
-    darkBackground = (5, 5, 15)                  # Black Hole
-    darkLabel = (255, 255, 255)
+    label = (210, 225, 245)                      # Slight blue tint, for headers
+    secondaryLabel = (57, 84, 131, 1)        # Muted blue-gray for subtext
+    tertiaryLabel = (80, 100, 150, 1)         # Soft, subtle blue-gray glow
+    quaternaryLabel = (140, 160, 180, 40)        # Ghosted, very low-emphasis

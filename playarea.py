@@ -26,9 +26,9 @@ class PlayArea(Panel):
     def create_cell_rects(self, panel: pygame.Rect, alignment: tuple=[int,int] ,gap=4):
 
         # Container Size: use the smaller of width/height to keep board square
-        container_size = min(panel.height, panel.width) * 1
+        container_size = min(panel.height, panel.width) * 0.9
         # Position the board in the panel using alignment
-        x,y = self.determine_position(container_size, container_size, panel, alignment)
+        x,y = self.determine_position((container_size, container_size), panel, alignment)
         # Rectangle object for the board area
         self._container = pygame.Rect(x,y, container_size, container_size)
 
@@ -46,6 +46,14 @@ class PlayArea(Panel):
                 y = ctnr_locy + row * (size + gap)
                 row_rects.append(pygame.Rect(x, y, size, size))
             self._cell_rects.append(row_rects)
+
+    def reset(self):
+        self.current_player = self.O
+        for _, cell in self._cell_states.items():
+            cell["player"] = 0
+            cell["turns"] = 0
+
+
 
     # Logic
     def clicked(self, pos: tuple[int, int]) -> bool:
@@ -128,7 +136,8 @@ class PlayArea(Panel):
                     sprite_copy.set_alpha(100)  # 0 = invisible, 255 = opaque
 
                 # Resize and draw
-                sprite_resized = self.responisve_size(sprite_copy, cell, 0.8)
-                x, y = self.determine_position(sprite_resized.get_width(), sprite_resized.get_height(), cell, (self.CENTER, self.MIDDLE))
+                w, h = self.responsive_size(sprite_copy.size, cell, 0.8)
+                sprite_resized = pygame.transform.scale(sprite_copy, (w, h))
+                x, y = self.determine_position(sprite_resized.get_size(), cell, (self.CENTER, self.MIDDLE))
                 screen.blit(sprite_resized, (x, y))
 
