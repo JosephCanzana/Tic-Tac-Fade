@@ -10,7 +10,7 @@ class MyColor:
     secondaryBackground = (24, 32, 48)
     tertiaryBackground = (33, 42, 62)
 
-    label = (210, 225, 245)                      # Slight blue tint, for headers
-    secondaryLabel = (57, 84, 131, 1)        # Muted blue-gray for subtext
-    tertiaryLabel = (80, 100, 150, 1)         # Soft, subtle blue-gray glow
-    quaternaryLabel = (140, 160, 180, 40)        # Ghosted, very low-emphasis
+    label = (210, 225, 245)              
+    secondaryLabel = (57, 84, 131, 1)        
+    tertiaryLabel = (80, 100, 150, 1)        
+    quaternaryLabel = (140, 160, 180, 40)        

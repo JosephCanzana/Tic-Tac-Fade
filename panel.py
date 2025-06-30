@@ -55,13 +55,12 @@ class Panel:
              south_clr="#FFFFFF", 
              west_clr="#FFFFFF", 
              center_clr="#FFFFFF"):
-        
+        # For each region color
         pygame.draw.rect(screen, rect=self.north, color=north_clr)
         pygame.draw.rect(screen, rect=self.east, color=east_clr)
-        pygame.draw.rect(screen, rect=self.west, color=south_clr)
-        pygame.draw.rect(screen, rect=self.south, color=west_clr)
+        pygame.draw.rect(screen, rect=self.south, color=south_clr)
+        pygame.draw.rect(screen, rect=self.west, color=west_clr)
         pygame.draw.rect(screen, rect=self.center, color=center_clr)
-
 
     def add(
         self,
@@ -73,16 +72,17 @@ class Panel:
         gap: tuple[int, int] = (0, 0),
         responsive: bool = True,
     ):
+        # Region default
         if region_rect is None:
             region_rect = self.center
 
         if responsive:
             # Making surface reponsive
-            w, h = self.responsive_size(surface.size, region_rect, size_pct)
+            w, h = self.responsive_size(surface.get_size(), region_rect, size_pct)
             surface = pygame.transform.scale(surface, (w, h))
 
             # Alignment logic
-            x, y = self.determine_position(surface.size, region_rect, alignment)
+            x, y = self.determine_position(surface.get_size(), region_rect, alignment)
 
         # Gap
         wgap, hgap = gap
@@ -152,6 +152,9 @@ class Panel:
         
 
     def resize(self, window_size):
+        """
+        For updating the window every frame
+        """
         # Store the full window size (width, height)
         self.window_size = window_size
 
@@ -160,6 +163,39 @@ class Panel:
         self._set_south(self._south_pct)
         self._set_east(self._east_pct)
         self._set_west(self._west_pct)
+
+    def add_sprite_rect(self,
+                        screen: pygame.Surface,
+                        sprite: pygame.Surface,
+                        size_pct: float,
+                        region: pygame.Rect,
+                        pos: tuple [str, str],
+                        gap: tuple[int, int]):
+        """
+        Adding sprite as a background of rectangle
+        """
+        
+        wgap, hgap = gap
+        # Resizing and repositioning
+        w, h  = self.responsive_size(sprite.get_size(), region, size_pct)
+        x, y = self.determine_position((w, h), region, pos)
+        x += wgap
+        y += hgap
+        
+        # Create sprite
+        sprite_resized = pygame.transform.scale(sprite, (w, h))
+        screen.blit(sprite_resized, (x, y))
+        # Return the rectangle
+        return pygame.Rect(x, y, w, h)
+
+    
+    def fade_sprite_copy(self, sprite: pygame.Surface, opacity: int):
+        """
+        Creates a new sprite to reduce opcity while maintining the original
+        """
+        sprite_copy = sprite.copy()
+        sprite_copy.set_alpha(opacity)
+        return sprite_copy
 
     # NORTH
     @property
